@@ -66,6 +66,14 @@ get_network_boxes = lib.get_network_boxes
 get_network_boxes.argtypes = [c_void_p, c_int, c_int, c_float, c_float, POINTER(c_int), c_int, POINTER(c_int)]
 get_network_boxes.restype = POINTER(DETECTION)
 
+num_boxes = lib.num_boxes
+num_boxes.argtypes = [c_void_p]
+num_boxes.restype = c_int
+
+make_probs = lib.make_probs
+make_probs.argtypes = [c_void_p]
+make_probs.restype = POINTER(POINTER(c_float))
+
 make_network_boxes = lib.make_network_boxes
 make_network_boxes.argtypes = [c_void_p]
 make_network_boxes.restype = POINTER(DETECTION)
@@ -113,6 +121,10 @@ rgbgr_image.argtypes = [IMAGE]
 predict_image = lib.network_predict_image
 predict_image.argtypes = [c_void_p, IMAGE]
 predict_image.restype = POINTER(c_float)
+
+network_detect = lib.network_detect
+network_detect.argtypes = [c_void_p,     IMAGE,    c_float,      c_float,           c_float,   POINTER(DETECTION)]
+#void network_detect       (network *net, image im, float thresh, float hier_thresh, float nms, detection *dets);
 
 def classify(net, meta, im):
     out = predict_image(net, im)

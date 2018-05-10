@@ -450,6 +450,7 @@ layer get_network_detection_layer(network *net)
     return l;
 }
 
+
 image get_network_image_layer(network *net, int i)
 {
     layer l = net->layers[i];
@@ -937,6 +938,21 @@ void distribute_weights(layer l, layer base)
         cuda_push_array(l.biases_gpu, base.biases, l.outputs);
         cuda_push_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
     }
+}
+
+int num_boxes(network *net)
+{
+    layer l = net->layers[net->n-1];
+    return l.w*l.h*l.n;
+}
+
+void network_detect(network *net, image im, float thresh, float hier_thresh, float nms, detection *dets)
+{
+    network_predict_image(net, im);
+    layer l = net->layers[net->n-1];
+    int nboxes = num_boxes(net);
+    fill_network_boxes(net, im.w, im.h, thresh, hier_thresh, 0, 0, dets);
+    if (nms) do_nms_sort(dets, nboxes, l.classes, nms);
 }
 
 

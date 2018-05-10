@@ -1,6 +1,6 @@
-GPU=0
+GPU=1
 CUDNN=0
-OPENCV=0
+OPENCV=1
 OPENMP=0
 DEBUG=0
 
@@ -99,3 +99,11 @@ results:
 clean:
 	rm -rf $(OBJS) $(SLIB) $(ALIB) $(EXEC) $(EXECOBJ) $(OBJDIR)/*
 
+install:
+	mkdir -p /usr/local/lib/python2.7/site-packages/darknet/
+	cp python/darknet.py  /usr/local/lib/python2.7/site-packages/darknet/
+	cp python/proverbot.py /usr/local/lib/python2.7/site-packages/darknet/
+	cp libdarknet.so  /usr/local/lib/python2.7/site-packages/darknet/
+	echo 'remember to add the followint to bashrc:'
+	echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/python2.7/site-packages/darknet'
+    echo 'export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python2.7/site-packages/darknet'  
