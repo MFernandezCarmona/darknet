@@ -104,6 +104,6 @@ install:
 	cp python/darknet.py  /usr/local/lib/python2.7/site-packages/darknet/
 	cp python/proverbot.py /usr/local/lib/python2.7/site-packages/darknet/
 	cp libdarknet.so  /usr/local/lib/python2.7/site-packages/darknet/
-	echo 'remember to add the followint to bashrc:'
-	echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/python2.7/site-packages/darknet'
-    echo 'export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python2.7/site-packages/darknet'  
+	#echo 'remember to add the followint to bashrc:'
+	#echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/python2.7/site-packages/darknet'
+        #echo 'export PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python2.7/site-packages/darknet'  
