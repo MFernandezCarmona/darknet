@@ -1,9 +1,9 @@
 classes= 80
-train  = /home/manolofc/workspace/darknet/data/coco/trainvalno5k.txt
+train  = /home/manolofc/qi_ws/darknet/data/coco/trainvalno5k.txt
 #valid  = coco_testdev
-valid = /home/manolofc/workspace/darknet/data/coco_val_5k.list
-names = /home/manolofc/workspace/darknet/data/coco.names
-backup = /home/manolofc/workspace/darknet/backup/
+valid = /home/manolofc/qi_ws/darknet/data/coco_val_5k.list
+names = /home/manolofc/qi_ws/darknet/data/coco.names
+backup = /home/manolofc/qi_ws/darknet/backup/
 eval=coco
 
 

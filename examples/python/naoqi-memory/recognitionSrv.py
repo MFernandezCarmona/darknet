@@ -11,8 +11,11 @@ from PyQt4.QtGui import QWidget, QImage, QApplication, QPainter
 import vision_definitions
 import argparse
 
+from naoqi import ALProxy
 from ctypes import *
-from matplotlib import cm
+
+
+
 
 
 def array_to_image(arr):
@@ -84,7 +87,7 @@ def image_np2cv(npImage):
         return open_cv_image
 
 
-def main(session, robot_ip, port,camera,yoloCFG,yoloWeights,yoloData):
+def main(session, memProxy, robot_ip, port,camera,yoloCFG,yoloWeights,yoloData):
     
     video_service = session.service("ALVideoDevice")
     resolution = vision_definitions.kQVGA  # kQVGA =320 * 240  ,kVGA =640x480
@@ -98,9 +101,6 @@ def main(session, robot_ip, port,camera,yoloCFG,yoloWeights,yoloData):
     # Darknet ... 
     net = dn.load_net(yoloCFG, yoloWeights , 0)
     meta = dn.load_meta(yoloData )
-
-    #some constants for plotting
-    font = cv2.FONT_HERSHEY_SIMPLEX
 
     while True:
 
@@ -122,56 +122,15 @@ def main(session, robot_ip, port,camera,yoloCFG,yoloWeights,yoloData):
             dn.rgbgr_image(im)
 
             r = detect2(net, meta, im)
-            print r
-            print '..........................................'
 
-            if r != []:
-                cnt = 0
-                while cnt < len(r):
-                      name = r[cnt][0]
-                      predict = r[cnt][1]
-                      print (name+":"+str(predict))
-                      x = r[cnt][2][0]
-                      y = r[cnt][2][1]
-                      w = r[cnt][2][2]
-                      z = r[cnt][2][3]
-                      #print (x, y, w, z)
+            try:
 
-                      x_max = int(round((2*x+w)/2))
-                      x_min = int(round((2*x-w)/2))
-                      y_min = int(round((2*y-z)/2))
-                      y_max = int(round((2*y+z)/2))
-                      #print (x_min, y_min, x_max, y_max)
-                      pixel_list = [ x_min, y_min, x_max, y_max]
-                      neg_index = [pixel_list.index(val) for val in pixel_list if val < 0]
-                      object_color = cm.jet(cnt)[0:3]
-                      cv2.rectangle(cv_img,(x_min,y_min),(x_max,y_max),(object_color), 2)
-                      if neg_index == []:
-                              cv2.rectangle(cv_img,(x_min,y_min-24), (x_min+10*len(name),y_min),object_color,-1)
-                              cv2.putText(cv_img,name,(x_min,y_min-12), font, 0.5,(0,0,0),1,cv2.LINE_AA)
-                      else:
-                              if (y_min < 0 and x_min > 0):
-                                      cv2.rectangle(cv_img,(x_min,0), (x_min+10*len(name),24),object_color,-1)
-                                      cv2.putText(cv_img,name,(x_min,12), font, 0.5,(0,0,0),1,cv2.LINE_AA)
-                              elif (x_min < 0 and y_min > 0):
-                                      cv2.rectangle(cv_img,(0,y_min-24), (10*len(name),y_min),object_color,-1)
-                                      cv2.putText(cv_img,name,(0,y_min-12), font, 0.5,(0,0,0),1,cv2.LINE_AA)
-                              elif (x_min < 0 and y_min < 0):
-                                      cv2.rectangle(cv_img,(0,0), (10*len(name),24),object_color,-1)
-                                      cv2.putText(cv_img,name,(0,12), font, 0.5,(0,0,0),1,cv2.LINE_AA)
-                      #cv2.imshow('image',cv_img)
-                      #cropped = image.crop((x_min, y_min+20, x_max, y_max))
-                      cnt+=1
-                 
-            # show image
-            cv2.imshow("pepper-camera", cv_img)
+              #insertData. Value can be int, float, list, string
+              memProxy.insertData("detectedObjects", r)
 
-        # exit by [ESC]
-        if cv2.waitKey(33) == 27:
-            break
-
-
-
+            except RuntimeError,e:
+              # catch exception
+              print "error insert data", e
 
 
 if __name__ == "__main__":
@@ -190,17 +149,15 @@ if __name__ == "__main__":
     parser.add_argument("--yoloData", type=str, default="/home/manolofc/workspace/darknet/cfg/coco-mfc.data",
                         help="Yolo data file with abslute path")
       
-     
-
-
-
 
     args = parser.parse_args()
     session = qi.Session()
     try:
         session.connect("tcp://" + args.ip + ":" + str(args.port))
+        memProxy = ALProxy("ALMemory",args.ip,args.port)
+
     except RuntimeError:
         print ("Can't connect to Naoqi at ip \"" + args.ip + "\" on port " + str(args.port) +".\n"
                "Please check your script arguments. Run with -h option for help.")
         sys.exit(1)
-    main(session, args.ip, args.port,args.camera,args.yoloCFG, args.yoloWeights, args.yoloData)
+    main(session, memProxy, args.ip, args.port,args.camera,args.yoloCFG, args.yoloWeights, args.yoloData)

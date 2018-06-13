@@ -1,0 +1,5 @@
+# Remember that data file also contain absolute routes ...
+
+yoloCFG: /home/manolofc/qi_ws/darknet/cfg/yolov3.cfg
+yoloWeights: /home/manolofc/qi_ws/darknet/yolov3.weights
+yoloData: /home/manolofc/qi_ws/darknet/cfg/coco-mfc.data
