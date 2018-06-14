@@ -14,6 +14,25 @@ import argparse
 from ctypes import *
 from matplotlib import cm
 
+import random
+
+
+def colors(n):
+  ret = []
+  r = int(random.random() * 256)
+  g = int(random.random() * 256)
+  b = int(random.random() * 256)
+  step = 256 / n
+  for i in range(n):
+    r += step
+    g += step
+    b += step
+    r = int(r) % 256
+    g = int(g) % 256
+    b = int(b) % 256
+    ret.append((b,g,r)) 
+  return ret
+
 
 def array_to_image(arr):
     arr = arr.transpose(2,0,1)
@@ -127,6 +146,7 @@ def main(session, robot_ip, port,camera,yoloCFG,yoloWeights,yoloData):
 
             if r != []:
                 cnt = 0
+                colorList = colors(len(r))
                 while cnt < len(r):
                       name = r[cnt][0]
                       predict = r[cnt][1]
@@ -144,7 +164,9 @@ def main(session, robot_ip, port,camera,yoloCFG,yoloWeights,yoloData):
                       #print (x_min, y_min, x_max, y_max)
                       pixel_list = [ x_min, y_min, x_max, y_max]
                       neg_index = [pixel_list.index(val) for val in pixel_list if val < 0]
-                      object_color = cm.jet(5*cnt)[0:3]
+                      object_color = colorList[cnt]
+
+                      name = name+" {:.2f}%".format(100*predict)
                       cv2.rectangle(cv_img,(x_min,y_min),(x_max,y_max),(object_color), 2)
                       if neg_index == []:
                               cv2.rectangle(cv_img,(x_min,y_min-24), (x_min+10*len(name),y_min),object_color,-1)
@@ -164,7 +186,9 @@ def main(session, robot_ip, port,camera,yoloCFG,yoloWeights,yoloData):
                       cnt+=1
                  
             # show image
-            cv2.imshow("pepper-camera", cv_img)
+            #cv2.imshow("pepper-camera", cv_img)
+            cv2.imwrite('pepper.png',cv_img)
+
 
         # exit by [ESC]
         if cv2.waitKey(33) == 27:
@@ -183,11 +207,11 @@ if __name__ == "__main__":
     parser.add_argument("--camera", type=int, default=0,
                         help="CameraID: 0 up, 1 down, 2 depth")
 
-    parser.add_argument("--yoloCFG", type=str, default="/home/manolofc/workspace/darknet/cfg/yolov3.cfg",
+    parser.add_argument("--yoloCFG", type=str, default="/home/manolofc/qi_ws/darknet/cfg/yolov3.cfg",
                         help="Yolo cfg file with abslute path")
-    parser.add_argument("--yoloWeights", type=str, default="/home/manolofc/workspace/darknet/yolov3.weights",
+    parser.add_argument("--yoloWeights", type=str, default="/home/manolofc/qi_ws/darknet/yolov3.weights",
                         help="Yolo weights file with abslute path")
-    parser.add_argument("--yoloData", type=str, default="/home/manolofc/workspace/darknet/cfg/coco-mfc.data",
+    parser.add_argument("--yoloData", type=str, default="/home/manolofc/qi_ws/darknet/cfg/coco-mfc.data",
                         help="Yolo data file with abslute path")
       
      

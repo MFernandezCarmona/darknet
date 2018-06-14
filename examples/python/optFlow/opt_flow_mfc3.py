@@ -219,9 +219,9 @@ if __name__ == '__main__':
         count = 0
 
         #Darknet ... 
-        yoloCFG = "/home/manolofc/workspace/darknet/cfg/yolov3.cfg"
-        yoloWeights = "/home/manolofc/workspace/darknet/yolov3.weights"
-        yoloData = "/home/manolofc/workspace/darknet/cfg/coco-mfc.data"
+        yoloCFG = "/home/manolofc/qi_ws/darknet/cfg/yolov3.cfg"
+        yoloWeights = "/home/manolofc/qi_ws/darknet/yolov3.weights"
+        yoloData = "/home/manolofc/qi_ws/darknet/cfg/coco-mfc.data"
         net = dn.load_net(yoloCFG, yoloWeights , 0)
         meta = dn.load_meta(yoloData )
 

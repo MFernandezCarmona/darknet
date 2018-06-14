@@ -65,7 +65,7 @@ def draw_flow(img, flow, step=16):
     #av_line = np.vstack([x0, y0, x0+av_img_flow[0], y0+av_img_flow[1]]).T.reshape(-1, 2, 2)
     #av_line = np.int32(av_line + 0.5)
 
-    cv.line(vis, (x0, y0) , (x0+int(10*av_img_flow[0]), y0+int(10*av_img_flow[1])) , (255, 0, 0), 3)
+    cv.line(vis, (x0, y0) , (x0+int(10*av_img_flow[0]), y0+int(10*av_img_flow[1])) , (0, 0, 255), 3)
     
     for (x1, y1), (_x2, _y2) in lines:
         cv.circle(vis, (x1, y1), 1, (0, 255, 0), -1)
@@ -155,9 +155,9 @@ if __name__ == '__main__':
         count = 0
 
         #Darknet ... 
-        yoloCFG = "/home/manolofc/workspace/darknet/cfg/yolov3.cfg"
-        yoloWeights = "/home/manolofc/workspace/darknet/yolov3.weights"
-        yoloData = "/home/manolofc/workspace/darknet/cfg/coco-mfc.data"
+        yoloCFG = "/home/manolofc/qi_ws/darknet/cfg/yolov3.cfg"
+        yoloWeights = "/home/manolofc/qi_ws/darknet/yolov3.weights"
+        yoloData = "/home/manolofc/qi_ws/darknet/cfg/coco-mfc.data"
         net = dn.load_net(yoloCFG, yoloWeights , 0)
         meta = dn.load_meta(yoloData )
 
