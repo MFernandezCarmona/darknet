@@ -64,6 +64,7 @@ class DarknetSRV(object):
         #print("You still need to add weights, config and meta")
         self.setNet(yoloCFG,yoloWeights)
         self.setMeta(yoloData)
+        self.lastImg = None
         print("Darknet service loaded")
 
     @qi.bind(returnType=qi.AnyArguments, paramsType=[qi.List(qi.UInt16)]) # == python long??
@@ -88,7 +89,13 @@ class DarknetSRV(object):
                 #print("Detecting")
                 r = self.detect2(self.net, self.meta, im)
                 #print("Detection done")
+                self.lastImg = img
         return r
+
+    @qi.bind(returnType=qi.AnyArguments, paramsType=[qi.Void])
+    def getImg(self):
+        "Get used img"
+        return self.lastImg
 
 
     @qi.bind(returnType=qi.Void, paramsType=[qi.String, qi.String])
