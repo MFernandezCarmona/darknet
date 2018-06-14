@@ -123,7 +123,7 @@ class DarknetSRV(object):
 
     def image_np2cv(self,npImage):
             # dirty way to use in cv2 or cv3
-            if cv2.__version__ == '3.3.1-dev':
+            if (cv2.__version__ == '3.3.1-dev') or (cv2.__version__ == '3.4.1'):
                 open_cv_image = cv2.cvtColor(npImage, cv2.COLOR_BGR2RGB)
             else:
                 open_cv_image = cv2.cvtColor(npImage, cv2.cv.CV_BGR2RGB)
