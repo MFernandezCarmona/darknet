@@ -38,8 +38,9 @@ except RuntimeError:
 
 print ("Connecting to Darknet service")
 DarknetSRV = session.service("DarknetSRV")
-DarknetSRV.setNet(args.yoloCFG,args.yoloWeights)
-DarknetSRV.setMeta(args.yoloData)
+# Not needed, as we can use cfg file for service
+#DarknetSRV.setNet(args.yoloCFG,args.yoloWeights)
+#DarknetSRV.setMeta(args.yoloData)
 
 
 
