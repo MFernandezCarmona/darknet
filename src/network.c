@@ -50,6 +50,15 @@ load_args get_base_args(network *net)
     return args;
 }
 
+float **make_probs(network *net)
+{
+    int j;
+    layer l = net->layers[net->n-1];
+    float **probs = calloc(l.w*l.h*l.n, sizeof(float *));
+    for(j = 0; j < l.w*l.h*l.n; ++j) probs[j] = calloc(l.classes + 1, sizeof(float *));
+    return probs;
+}
+
 network *load_network(char *cfg, char *weights, int clear)
 {
     network *net = parse_network_cfg(cfg);
