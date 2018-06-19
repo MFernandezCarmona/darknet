@@ -186,8 +186,8 @@ def main(session, robot_ip, port,camera,yoloCFG,yoloWeights,yoloData):
                       cnt+=1
                  
             # show image
-            #cv2.imshow("pepper-camera", cv_img)
-            cv2.imwrite('pepper.png',cv_img)
+            cv2.imshow("pepper-camera", cv_img)
+            #cv2.imwrite('pepper.png',cv_img)
 
 
         # exit by [ESC]

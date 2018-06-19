@@ -142,11 +142,11 @@ if __name__ == "__main__":
     parser.add_argument("--camera", type=int, default=0,
                         help="CameraID: 0 up, 1 down, 2 depth")
 
-    parser.add_argument("--yoloCFG", type=str, default="/home/manolofc/workspace/darknet/cfg/yolov3.cfg",
+    parser.add_argument("--yoloCFG", type=str, default="/home/manolofc/qi_ws/darknet/cfg/yolov3.cfg",
                         help="Yolo cfg file with abslute path")
-    parser.add_argument("--yoloWeights", type=str, default="/home/manolofc/workspace/darknet/yolov3.weights",
+    parser.add_argument("--yoloWeights", type=str, default="/home/manolofc/qi_ws/darknet/yolov3.weights",
                         help="Yolo weights file with abslute path")
-    parser.add_argument("--yoloData", type=str, default="/home/manolofc/workspace/darknet/cfg/coco-mfc.data",
+    parser.add_argument("--yoloData", type=str, default="/home/manolofc/qi_ws/darknet/cfg/coco-mfc.data",
                         help="Yolo data file with abslute path")
       
 
